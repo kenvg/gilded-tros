@@ -16,7 +16,7 @@ class GildedTros {
 
     public void updateQuality() {
         for (Item item : items) {
-            String quality = findQuality(item);
+            String quality = determineQuality(item);
 
             if (quality.equals(LEGENDARY)) {
                 return;
@@ -65,7 +65,7 @@ class GildedTros {
         }
     }
 
-    public String findQuality(Item item) {
+    public String determineQuality(Item item) {
         if (legendaries.contains(item.name)) {
             return LEGENDARY;
         }
