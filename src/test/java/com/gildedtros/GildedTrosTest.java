@@ -55,7 +55,7 @@ class GildedTrosTest {
 
     @Nested
     @DisplayName("given legendary item")
-    class LegendaryItems {
+    class LegendaryItem {
         @Test
         @DisplayName("then quality and sellIn remain the same")
         void givenItemBdawgKeyChain_whenUpdateQuality_thenSameQuality() {
@@ -71,9 +71,47 @@ class GildedTrosTest {
             assertEquals(quality, app.items[0].quality);
             assertEquals(sellIn, app.items[0].sellIn);
         }
-
-
     }
+
+    @Nested
+    @DisplayName("given normal item")
+    class NormalItem {
+        @Nested
+        @DisplayName("then decrease quality")
+        class DecreaseQuality {
+
+            @Test
+            @DisplayName("once when sellIn > 0")
+            void givenNormalItem_whenUpdateQuality_thenDecreaseQuality() {
+                int quality = 50;
+                int sellIn = 1;
+
+                Item normalItem = new Item("Normal Item", sellIn, quality);
+                Item[] items = {normalItem};
+
+                GildedTros app = new GildedTros(items);
+                app.updateQuality();
+
+                assertEquals(quality -1, app.items[0].quality);
+            }
+
+            @Test
+            @DisplayName("twice when sellIn <= 0")
+            void givenNormalItem_whenUpdateQuality_thenDecreaseQualityTwice() {
+                int quality = 50;
+                int sellIn = 0;
+
+                Item normalItem = new Item("Normal Item", sellIn, quality);
+                Item[] items = {normalItem};
+
+                GildedTros app = new GildedTros(items);
+                app.updateQuality();
+
+                assertEquals(quality -2, app.items[0].quality);
+            }
+        }
+    }
+
 
     @Nested
     @DisplayName("given backstage pass")
