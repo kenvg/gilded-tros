@@ -3,6 +3,8 @@ package com.gildedtros;
 import java.util.List;
 
 import static com.gildedtros.ItemConstants.*;
+import static com.gildedtros.ItemConstants.GOOD_WINE;
+import static com.gildedtros.QualityConstants.*;
 
 class GildedTros {
 
@@ -13,65 +15,83 @@ class GildedTros {
     }
 
     public void updateQuality() {
-//        for (int i = 0; i < items.length; i++) {
-//            if (!items[i].name.equals(GOOD_WINE)
-//                    && !items[i].name.equals("Backstage passes for Re:Factor")
-//                    && !items[i].name.equals("Backstage passes for HAXX"))
-//            {
-//                if (items[i].quality > 0) {
-//                    if (!items[i].name.equals(B_DAWG_KEYCHAIN)) {
-//                        items[i].quality = items[i].quality - 1;
-//                    }
-//                }
-//            } else {
-//                if (items[i].quality < 50) {
-//                    items[i].quality = items[i].quality + 1;
-//
-//                    if (items[i].name.equals("Backstage passes for Re:Factor") || items[i].name.equals("Backstage passes for HAXX") ) {
-//                        if (items[i].sellIn < 11) {
-//                            if (items[i].quality < 50) {
-//                                items[i].quality = items[i].quality + 1;
-//                            }
-//                        }
-//
-//                        if (items[i].sellIn < 6) {
-//                            if (items[i].quality < 50) {
-//                                items[i].quality = items[i].quality + 1;
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//
-//            if (!items[i].name.equals(B_DAWG_KEYCHAIN)) {
-//                items[i].sellIn = items[i].sellIn - 1;
-//            }
-//
-//            if (items[i].sellIn < 0) {
-//                if (!items[i].name.equals(GOOD_WINE)) {
-//                    if (!items[i].name.equals("Backstage passes for Re:Factor") && !items[i].name.equals("Backstage passes for HAXX")) {
-//                        if (items[i].quality > 0) {
-//                            if (!items[i].name.equals(B_DAWG_KEYCHAIN)) {
-//                                items[i].quality = items[i].quality - 1;
-//                            }
-//                        }
-//                    } else {
-//                        items[i].quality = items[i].quality - items[i].quality;
-//                    }
-//                } else {
-//                    if (items[i].quality < 50) {
-//                        items[i].quality = items[i].quality + 1;
-//                    }
-//                }
-//            }
-//        }
+        for (Item item : items) {
+            String quality = findQuality(item);
+
+            if (quality.equals(LEGENDARY)) {
+                return;
+            }
+
+            if (quality.equals(POOR)) {
+                if (item.sellIn <= 0) {
+                    decreaseQuality(item, 4);
+                    return;
+                }
+                decreaseQuality(item, 2);
+                return;
+            }
+
+            if (quality.equals(BACKSTAGE_PASS)) {
+                if (item.sellIn <= 0) {
+                    decreaseQuality(item, item.quality);
+                    return;
+                }
+
+                if (item.sellIn <= 5) {
+                    increaseQuality(item, 3);
+                    return;
+                }
+
+                if (item.sellIn <= 10) {
+                    increaseQuality(item, 2);
+                    return;
+                }
+                increaseQuality(item, 1);
+                return;
+            }
+
+            if (quality.equals(WINE)) {
+                increaseQuality(item, 1);
+                return;
+            }
+
+            if (quality.equals(COMMON)) {
+                if (item.sellIn <= 0) {
+                    decreaseQuality(item, 2);
+                    return;
+                }
+                decreaseQuality(item, 1);
+            }
+        }
     }
 
-    public void decreaseQuality(Item item) {
+    public String findQuality(Item item) {
+        if (legendaries.contains(item.name)) {
+            return LEGENDARY;
+        }
 
+        if (smellyItems.contains(item.name)) {
+            return POOR;
+        }
+
+        if (backstagePasses.contains(item.name)) {
+            return BACKSTAGE_PASS;
+        }
+
+        if (GOOD_WINE.equals(item.name)) {
+            return WINE;
+        }
+
+        return COMMON;
     }
 
-    public void increaseQuality(Item item) {
+    public void decreaseQuality(Item item, int amount) {
+        item.quality = Math.max(item.quality - amount, 0);
+        item.sellIn -= 1;
+    }
 
+    public void increaseQuality(Item item, int amount) {
+        item.quality = Math.min(item.quality + amount, 50);
+        item.sellIn -= 1;
     }
 }
