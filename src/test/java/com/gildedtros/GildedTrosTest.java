@@ -17,7 +17,7 @@ class GildedTrosTest {
         @DisplayName("then increase quality")
         class IncreaseQuality {
             @Test
-            @DisplayName("when sellIn decreases and quality is lower than 50")
+            @DisplayName("when sellIn decreases and quality < 50")
             void givenItemGoodWine_whenUpdateQuality_thenIncreaseQuality() {
                 int quality = 20;
                 int sellIn = 5;
@@ -36,7 +36,7 @@ class GildedTrosTest {
         @DisplayName("then same quality")
         class SameQuality {
             @Test
-            @DisplayName("when sellIn decreases and quality is 50")
+            @DisplayName("when sellIn decreases and quality = 50")
             void givenItemGoodWine_whenUpdateQuality_thenSameQuality() {
                 int quality = 50;
                 int sellIn = 5;
@@ -83,9 +83,9 @@ class GildedTrosTest {
         class IncreaseQuality {
             @Test
             @Order(1)
-            @DisplayName("once when sellIn higher than 10 and quality lower than 50")
+            @DisplayName("once when sellIn > 10 and quality <= 49")
             void givenItemBackStagePasses_whenUpdateQuality_thenIncreaseQuality() {
-                int quality = 45;
+                int quality = 49;
                 int sellIn = 20;
 
                 Item haxxBackStagePass = new Item(HAXX, sellIn, quality);
@@ -99,9 +99,9 @@ class GildedTrosTest {
 
             @Test
             @Order(2)
-            @DisplayName("twice when sellIn 10 or less and quality lower than 50")
+            @DisplayName("twice when sellIn =< 10 and quality <= 48")
             void givenItemBackStagePasses_whenUpdateQualityForSellIn10orLess_thenIncreaseQualityTwice() {
-                int quality = 35;
+                int quality = 48;
                 int sellIn = 10;
 
                 Item reFactorBackStagePass = new Item(RE_FACTOR, sellIn, quality);
@@ -115,9 +115,9 @@ class GildedTrosTest {
 
             @Test
             @Order(3)
-            @DisplayName("thrice when sellIn 5 or less and quality lower than 50")
+            @DisplayName("thrice when sellIn <= 5 and quality <= 47")
             void givenItemBackStagePasses_whenUpdateQualityForSellIn5orLess_thenIncreaseQualityThrice() {
-                int quality = 5;
+                int quality = 47;
                 int sellIn = 5;
 
                 Item haxxBackStagePass = new Item(HAXX, sellIn, quality);
@@ -135,7 +135,7 @@ class GildedTrosTest {
         class SameQuality {
 
             @Test
-            @DisplayName("when quality is 50")
+            @DisplayName("when quality = 50")
             void givenItemBackStagePasses_whenUpdateQualityForQuality50_thenSameQuality() {
                 int quality = 50;
                 int sellIn = 20;
@@ -153,7 +153,7 @@ class GildedTrosTest {
     }
 
     @Nested
-    @DisplayName("given a smelly item")
+    @DisplayName("given smelly item")
     class SmellyItems {
 
         @Nested
@@ -161,22 +161,7 @@ class GildedTrosTest {
         class DecreaseQuality {
 
             @Test
-            @DisplayName("twice when sellIn decreases and quality higher than 2")
-            void givenItemDuplicateCode_whenUpdateQuality_thenDecreaseQuality() {
-                int quality = 2;
-                int sellIn = 20;
-
-                Item duplicateCode = new Item(DUPLICATE_CODE, sellIn, quality);
-                Item[] items = {duplicateCode};
-
-                GildedTros app = new GildedTros(items);
-                app.updateQuality();
-
-                assertEquals(quality - 2, app.items[0].quality);
-            }
-
-            @Test
-            @DisplayName("once when sellIn decreases and quality is 1")
+            @DisplayName("once when sellIn decreases and quality = 1")
             void givenItemLongMethods_whenUpdateQuality_thenDecreaseQuality() {
                 int quality = 1;
                 int sellIn = 20;
@@ -190,13 +175,28 @@ class GildedTrosTest {
                 assertEquals(quality - 1, app.items[0].quality);
             }
 
+            @Test
+            @DisplayName("twice when sellIn decreases and quality >= 2")
+            void givenItemDuplicateCode_whenUpdateQuality_thenDecreaseQuality() {
+                int quality = 2;
+                int sellIn = 20;
+
+                Item duplicateCode = new Item(DUPLICATE_CODE, sellIn, quality);
+                Item[] items = {duplicateCode};
+
+                GildedTros app = new GildedTros(items);
+                app.updateQuality();
+
+                assertEquals(quality - 2, app.items[0].quality);
+            }
+
         }
 
         @Nested
         @DisplayName("then same quality")
         class SameQuality {
             @Test
-            @DisplayName("when quality is equal to 0")
+            @DisplayName("when quality = 0")
             void givenItemUglyVariableNames_whenUpdateQuality_thenSameQuality() {
                 int quality = 0;
                 int sellIn = 20;
