@@ -8,7 +8,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static com.gildedtros.ItemConstants.*;
 
-@DisplayName("update quality item tests")
+@DisplayName("gilded tros tests")
 class GildedTrosTest {
 
     List<Item> items;
