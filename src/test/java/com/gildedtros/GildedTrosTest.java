@@ -10,9 +10,9 @@ import static com.gildedtros.ItemConstants.*;
 
 @DisplayName("update quality item tests")
 class GildedTrosTest {
-    
+
     List<Item> items;
-    
+
     @BeforeEach
     void init() {
         items = new ArrayList<>();
@@ -30,13 +30,14 @@ class GildedTrosTest {
             void givenItemGoodWine_whenUpdateQuality_thenIncreaseQuality() {
                 int quality = 20;
                 int sellIn = 5;
-                
+
                 items.add(new Item(GOOD_WINE, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
                 assertEquals(quality + 1, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
         }
 
@@ -55,6 +56,7 @@ class GildedTrosTest {
                 app.updateQuality();
 
                 assertEquals(quality, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
 
         }
@@ -87,7 +89,7 @@ class GildedTrosTest {
         class DecreaseQuality {
 
             @Test
-            @DisplayName("once when sellIn > 0")
+            @DisplayName("1 time when sellIn > 0")
             void givenNormalItem_whenUpdateQuality_thenDecreaseQuality() {
                 int quality = 50;
                 int sellIn = 1;
@@ -97,11 +99,12 @@ class GildedTrosTest {
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality -1, items.get(0).quality);
+                assertEquals(quality - 1, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
 
             @Test
-            @DisplayName("twice when sellIn <= 0")
+            @DisplayName("two times when sellIn <= 0")
             void givenNormalItem_whenUpdateQuality_thenDecreaseQualityTwice() {
                 int quality = 50;
                 int sellIn = 0;
@@ -111,7 +114,8 @@ class GildedTrosTest {
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality -2, items.get(0).quality);
+                assertEquals(quality - 2, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
         }
     }
@@ -124,7 +128,7 @@ class GildedTrosTest {
         @DisplayName("then increase quality")
         class IncreaseQuality {
             @Test
-            @DisplayName("once when sellIn > 10 and quality <= 49")
+            @DisplayName("1 time when sellIn > 10 and quality <= 49")
             void givenItemBackStagePasses_whenUpdateQuality_thenIncreaseQuality() {
                 int quality = 49;
                 int sellIn = 20;
@@ -135,10 +139,11 @@ class GildedTrosTest {
                 app.updateQuality();
 
                 assertEquals(quality + 1, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
 
             @Test
-            @DisplayName("twice when sellIn <= 10 and quality <= 48")
+            @DisplayName("2 times when sellIn <= 10 and quality <= 48")
             void givenItemBackStagePasses_whenUpdateQualityForSellIn10orLess_thenIncreaseQualityTwice() {
                 int quality = 48;
                 int sellIn = 10;
@@ -149,10 +154,11 @@ class GildedTrosTest {
                 app.updateQuality();
 
                 assertEquals(quality + 2, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
 
             @Test
-            @DisplayName("thrice when sellIn <= 5 and quality <= 47")
+            @DisplayName("3 times when sellIn <= 5 and quality <= 47")
             void givenItemBackStagePasses_whenUpdateQualityForSellIn5orLess_thenIncreaseQualityThrice() {
                 int quality = 47;
                 int sellIn = 5;
@@ -163,6 +169,7 @@ class GildedTrosTest {
                 app.updateQuality();
 
                 assertEquals(quality + 3, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
         }
 
@@ -182,6 +189,7 @@ class GildedTrosTest {
                 app.updateQuality();
 
                 assertEquals(quality, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
 
         }
@@ -201,6 +209,7 @@ class GildedTrosTest {
                 app.updateQuality();
 
                 assertEquals(0, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
 
         }
@@ -217,7 +226,7 @@ class GildedTrosTest {
         class DecreaseQuality {
 
             @Test
-            @DisplayName("once when sellIn decreases and quality = 1")
+            @DisplayName("1 time when sellIn > 0 and quality = 1")
             void givenItemLongMethods_whenUpdateQuality_thenDecreaseQuality() {
                 int quality = 1;
                 int sellIn = 20;
@@ -228,11 +237,12 @@ class GildedTrosTest {
                 app.updateQuality();
 
                 assertEquals(quality - 1, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
 
             @Test
-            @DisplayName("twice when sellIn decreases and quality >= 2")
-            void givenItemDuplicateCode_whenUpdateQuality_thenDecreaseQuality() {
+            @DisplayName("2 times when sellIn > 0 and quality >= 2")
+            void givenItemDuplicateCode_whenUpdateQuality_thenDecreaseQualityTwice() {
                 int quality = 2;
                 int sellIn = 20;
 
@@ -242,6 +252,22 @@ class GildedTrosTest {
                 app.updateQuality();
 
                 assertEquals(quality - 2, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
+            }
+
+            @Test
+            @DisplayName("4 times when sellIn <= 0 and quality >= 4")
+            void givenItemDuplicateCode_whenUpdateQuality_thenDecreaseQualityFourTimes() {
+                int quality = 4;
+                int sellIn = 0;
+
+                items.add(new Item(DUPLICATE_CODE, sellIn, quality));
+
+                GildedTros app = new GildedTros(items);
+                app.updateQuality();
+
+                assertEquals(quality - 4, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
 
         }
@@ -260,7 +286,8 @@ class GildedTrosTest {
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality - 1, items.get(0).quality);
+                assertEquals(quality, items.get(0).quality);
+                assertEquals(sellIn - 1, items.get(0).sellIn);
             }
 
         }
