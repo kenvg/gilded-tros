@@ -16,6 +16,7 @@ public class ItemConstants {
 
     static Set<String> legendaries = new HashSet<>(Arrays.asList(B_DAWG_KEYCHAIN));
     static Set<String> backstagePasses = new HashSet<>(Arrays.asList(RE_FACTOR, HAXX));
+    static Set<String> smellyItems = new HashSet<>(Arrays.asList(DUPLICATE_CODE, LONG_METHODS, UGLY_VARIABLE_NAMES));
 
 
 }
