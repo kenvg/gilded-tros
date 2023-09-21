@@ -2,12 +2,21 @@ package com.gildedtros;
 
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static com.gildedtros.ItemConstants.*;
 
 @DisplayName("update quality item tests")
 class GildedTrosTest {
-
+    
+    List<Item> items;
+    
+    @BeforeEach
+    void init() {
+        items = new ArrayList<>();
+    }
 
     @Nested
     @DisplayName("given good wine")
@@ -21,14 +30,13 @@ class GildedTrosTest {
             void givenItemGoodWine_whenUpdateQuality_thenIncreaseQuality() {
                 int quality = 20;
                 int sellIn = 5;
-
-                Item goodWine = new Item(GOOD_WINE, sellIn, quality);
-                Item[] items = {goodWine};
+                
+                items.add(new Item(GOOD_WINE, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality + 1, app.items[0].quality);
+                assertEquals(quality + 1, items.get(0).quality);
             }
         }
 
@@ -41,13 +49,12 @@ class GildedTrosTest {
                 int quality = 50;
                 int sellIn = 5;
 
-                Item goodWine = new Item(GOOD_WINE, sellIn, quality);
-                Item[] items = {goodWine};
+                items.add(new Item(GOOD_WINE, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality, app.items[0].quality);
+                assertEquals(quality, items.get(0).quality);
             }
 
         }
@@ -62,14 +69,13 @@ class GildedTrosTest {
             int quality = 80;
             int sellIn = 50;
 
-            Item bDawgkeyChain = new Item(B_DAWG_KEYCHAIN, sellIn, quality);
-            Item[] items = {bDawgkeyChain};
+            items.add(new Item(B_DAWG_KEYCHAIN, sellIn, quality));
 
             GildedTros app = new GildedTros(items);
             app.updateQuality();
 
-            assertEquals(quality, app.items[0].quality);
-            assertEquals(sellIn, app.items[0].sellIn);
+            assertEquals(quality, items.get(0).quality);
+            assertEquals(sellIn, items.get(0).sellIn);
         }
     }
 
@@ -86,13 +92,12 @@ class GildedTrosTest {
                 int quality = 50;
                 int sellIn = 1;
 
-                Item normalItem = new Item("Normal Item", sellIn, quality);
-                Item[] items = {normalItem};
+                items.add(new Item("Normal Item", sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality -1, app.items[0].quality);
+                assertEquals(quality -1, items.get(0).quality);
             }
 
             @Test
@@ -101,13 +106,12 @@ class GildedTrosTest {
                 int quality = 50;
                 int sellIn = 0;
 
-                Item normalItem = new Item("Normal Item", sellIn, quality);
-                Item[] items = {normalItem};
+                items.add(new Item("Normal Item", sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality -2, app.items[0].quality);
+                assertEquals(quality -2, items.get(0).quality);
             }
         }
     }
@@ -120,51 +124,45 @@ class GildedTrosTest {
         @DisplayName("then increase quality")
         class IncreaseQuality {
             @Test
-            @Order(1)
             @DisplayName("once when sellIn > 10 and quality <= 49")
             void givenItemBackStagePasses_whenUpdateQuality_thenIncreaseQuality() {
                 int quality = 49;
                 int sellIn = 20;
 
-                Item haxxBackStagePass = new Item(HAXX, sellIn, quality);
-                Item[] items = {haxxBackStagePass};
+                items.add(new Item(HAXX, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality + 1, app.items[0].quality);
+                assertEquals(quality + 1, items.get(0).quality);
             }
 
             @Test
-            @Order(2)
-            @DisplayName("twice when sellIn =< 10 and quality <= 48")
+            @DisplayName("twice when sellIn <= 10 and quality <= 48")
             void givenItemBackStagePasses_whenUpdateQualityForSellIn10orLess_thenIncreaseQualityTwice() {
                 int quality = 48;
                 int sellIn = 10;
 
-                Item reFactorBackStagePass = new Item(RE_FACTOR, sellIn, quality);
-                Item[] items = {reFactorBackStagePass};
+                items.add(new Item(RE_FACTOR, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality + 2, app.items[0].quality);
+                assertEquals(quality + 2, items.get(0).quality);
             }
 
             @Test
-            @Order(3)
             @DisplayName("thrice when sellIn <= 5 and quality <= 47")
             void givenItemBackStagePasses_whenUpdateQualityForSellIn5orLess_thenIncreaseQualityThrice() {
                 int quality = 47;
                 int sellIn = 5;
 
-                Item haxxBackStagePass = new Item(HAXX, sellIn, quality);
-                Item[] items = {haxxBackStagePass};
+                items.add(new Item(HAXX, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality + 3, app.items[0].quality);
+                assertEquals(quality + 3, items.get(0).quality);
             }
         }
 
@@ -178,16 +176,36 @@ class GildedTrosTest {
                 int quality = 50;
                 int sellIn = 20;
 
-                Item haxxBackStagePass = new Item(HAXX, sellIn, quality);
-                Item[] items = {haxxBackStagePass};
+                items.add(new Item(HAXX, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality, app.items[0].quality);
+                assertEquals(quality, items.get(0).quality);
             }
 
         }
+
+        @Nested
+        @DisplayName("then decrease quality to 0")
+        class DecreaseQuality {
+            @Test
+            @DisplayName("when sellIn <= 0")
+            void givenItemBackStagePasses_whenUpdateQuality_thenDecreaseQuality() {
+                int quality = 50;
+                int sellIn = 0;
+
+                items.add(new Item(HAXX, sellIn, quality));
+
+                GildedTros app = new GildedTros(items);
+                app.updateQuality();
+
+                assertEquals(0, items.get(0).quality);
+            }
+
+        }
+
+
     }
 
     @Nested
@@ -204,13 +222,12 @@ class GildedTrosTest {
                 int quality = 1;
                 int sellIn = 20;
 
-                Item longMethods = new Item(LONG_METHODS, sellIn, quality);
-                Item[] items = {longMethods};
+                items.add(new Item(LONG_METHODS, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality - 1, app.items[0].quality);
+                assertEquals(quality - 1, items.get(0).quality);
             }
 
             @Test
@@ -219,13 +236,12 @@ class GildedTrosTest {
                 int quality = 2;
                 int sellIn = 20;
 
-                Item duplicateCode = new Item(DUPLICATE_CODE, sellIn, quality);
-                Item[] items = {duplicateCode};
+                items.add(new Item(DUPLICATE_CODE, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality - 2, app.items[0].quality);
+                assertEquals(quality - 2, items.get(0).quality);
             }
 
         }
@@ -239,13 +255,12 @@ class GildedTrosTest {
                 int quality = 0;
                 int sellIn = 20;
 
-                Item uglyVariableNames = new Item(UGLY_VARIABLE_NAMES, sellIn, quality);
-                Item[] items = {uglyVariableNames};
+                items.add(new Item(UGLY_VARIABLE_NAMES, sellIn, quality));
 
                 GildedTros app = new GildedTros(items);
                 app.updateQuality();
 
-                assertEquals(quality - 1, app.items[0].quality);
+                assertEquals(quality - 1, items.get(0).quality);
             }
 
         }
